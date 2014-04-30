@@ -7,32 +7,33 @@ class BadFormatException(Exception):
 	pass
 
 class Graph:
-	def __init__(self):
-		# This constructor is used when not loading from file
-		self.graph = list()
 
-	def __init__(self, filename):
+	def __init__(self, size, filename=None):
 		self.filename = filename
 		
-		try:
-			self.load_graph()
-		except IOError:
-			print "Error opening file, please check the filename you entered is valid."
-			sys.exit()
+		if (size != None):
+			self.graph = [[None for x in range(size)] for y in range(size)]
+		elif (filename != None):
+			try:
+				self.load_graph()
+			except IOError:
+				print "Error opening file, please check the filename you entered is valid."
+				sys.exit()
 
-		except IndexError:
-			print "Tried to index node that doesn't exist, check graph file."
-			sys.exit()
+			except IndexError:
+				print "Tried to index node that doesn't exist, check graph file."
+				sys.exit()
 
-		except BadFormatException:
-			print "Invalid format in graph file."
-			sys.exit()
-			
-		except EdgeException:
-			print "Number of edges does not match values defined in graph file."
-			sys.exit()
+			except BadFormatException:
+				print "Invalid format in graph file."
+				sys.exit()
+				
+			except EdgeException:
+				print "Number of edges does not match values defined in graph file."
+				sys.exit()
 
 	def load_graph(self):
+		# Loads graph into an adjacency matrix from file.
 		f = open(self.filename)
 
 		edges = 0
@@ -68,6 +69,9 @@ class Graph:
 				reversed[i].append(self.graph[j][i])
 		
 		self.graph = reversed
+
+	def add_edge(self, fr, to, weight):
+		self.graph[fr][to] = weight
 
 	def get_size(self):
 		return self.nodes
