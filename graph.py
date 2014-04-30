@@ -1,4 +1,8 @@
 class Graph:
+	def __init__(self):
+		# This constructor is used when not loading from file
+		self.graph = list()
+
 	def __init__(self, filename):
 		self.filename = filename
 		
