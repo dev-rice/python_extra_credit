@@ -31,12 +31,18 @@ class Graph:
 		f.close()
 
 	def reverse(self):
-		pass
+		reversed = list()
+		for i in range(0, len(self.graph)):
+			reversed.append(list())
+			for j in range(0, len(self.graph)):
+				reversed[i].append(self.graph[j][i])
+		
+		self.graph = reversed
+
+	def get_size(self):
+		return self.nodes
 
 	def display(self):
 		for node in self.graph:
 			print node
 		pass
-
-g = Graph("example_graph.txt")
-g.display()
