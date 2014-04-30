@@ -1,3 +1,11 @@
+import sys
+
+class EdgeException(Exception):
+	pass
+
+class BadFormatException(Exception):
+	pass
+
 class Graph:
 	def __init__(self):
 		# This constructor is used when not loading from file
@@ -10,12 +18,24 @@ class Graph:
 			self.load_graph()
 		except IOError:
 			print "Error opening file, please check the filename you entered is valid."
+			sys.exit()
+
 		except IndexError:
 			print "Tried to index node that doesn't exist, check graph file."
-		pass
+			sys.exit()
+
+		except BadFormatException:
+			print "Invalid format in graph file."
+			sys.exit()
+			
+		except EdgeException:
+			print "Number of edges does not match values defined in graph file."
+			sys.exit()
 
 	def load_graph(self):
 		f = open(self.filename)
+
+		edges = 0
 
 		for line in f:
 			line = line.strip('\n').split(' ')
@@ -23,14 +43,20 @@ class Graph:
 
 			if len(line) == 2:
 				self.nodes = line[0]
+				edges = line[1]
 				self.graph = [[None for x in range(self.nodes)] for y in range(self.nodes)]
-			else:
+			elif len(line) == 3:
+				edges = edges - 1
 				from_node, to_node, weight = line[0], line[1], line[2] 
-				
 				try:
 					self.graph[from_node - 1][to_node - 1] = weight
 				except IndexError:
 					raise IndexError
+			else:
+				raise BadFormatException
+
+		if (edges != 0):
+			raise EdgeException
 
 		f.close()
 
@@ -45,6 +71,9 @@ class Graph:
 
 	def get_size(self):
 		return self.nodes
+
+	def get_edge(self, fr, to):
+		return self.graph[fr][to]
 
 	def display(self):
 		for node in self.graph:
