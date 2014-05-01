@@ -9,7 +9,6 @@ class Dijkstra():
 	def run(self, root_node):
 		
 		self.vertices = self.initialize_single_source(root_node - 1)
-		S = set()
 		Q = [self.vertices[i] for i in range(0, len(self.vertices))]
 		Q.sort()
 
